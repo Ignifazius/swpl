@@ -142,10 +142,11 @@ public class Client implements Runnable {
 		char[] chars = in.toCharArray();
 		int j = chars.length;
 		char[] chars2 = new char[j];
-		for (int i = 0; i < j; i++){
-			chars2[j-i] = chars[i];
+		for (int i = 0; i <= j-1; i++){
+			chars2[j-1-i] = chars[i];
 		}
-		return chars2.toString();
+		
+		return new String(chars2);
 	}
 
 	/**
@@ -157,10 +158,10 @@ public class Client implements Runnable {
 		char[] chars = in.toCharArray();
 		int j = chars.length;
 		char[] chars2 = new char[j];
-		for (int i = 0; i < j; i++){
-			chars2[j-i] = chars[i];
+		for (int i = 0; i <= j-1; i++){
+			chars2[j-1-i] = chars[i];
 		}
-		return chars2.toString();	
+		return new String(chars2);
 	}
 	
 	public void logger(String text){
