@@ -78,12 +78,12 @@ public class Client implements Runnable {
 	 */
 	protected void handleIncomingMessage(Object msg) {
 		if (msg instanceof TextMessage) {
-			fireAddLine(((TextMessage) msg).getContent() + "\n");
+			fireAddLine(decrypt(((TextMessage) msg).getContent()) + "\n");
 		}
 	}
 
 	public void send(String line) {
-		send(new TextMessage(line));
+		send(new TextMessage(encrypt(line)));
 	}
 
 	public void send(TextMessage msg) {
@@ -127,5 +127,35 @@ public class Client implements Runnable {
 
 	public void stop() {
 		thread = null;
+	}
+	
+	/**
+	 * Methode zum verschlüsseln der Nachrichten
+	 * @param in verschlüsselter String
+	 * @return entschlüsslter String
+	 */
+	public String decrypt(String in) {
+		char[] chars = in.toCharArray();
+		int j = chars.length;
+		char[] chars2 = new char[j];
+		for (int i = 0; i < j; i++){
+			chars2[j-i] = chars[i];
+		}
+		return chars2.toString();
+	}
+
+	/**
+	 * Methode zum entschlüsseln der Nachrichten
+	 * @param in String
+	 * @return verschlüsslter String
+	 */
+	public String encrypt(String in){
+		char[] chars = in.toCharArray();
+		int j = chars.length;
+		char[] chars2 = new char[j];
+		for (int i = 0; i < j; i++){
+			chars2[j-i] = chars[i];
+		}
+		return chars2.toString();	
 	}
 }
