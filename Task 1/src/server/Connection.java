@@ -69,7 +69,7 @@ public class Connection extends Thread {
 	 */
 	private void handleIncomingMessage(String name, Object msg) {
 		if (msg instanceof TextMessage)
-			server.broadcast(name + " - " + ((TextMessage) msg).getContent());
+			server.broadcast(encrypt(name + " - " + decrypt(((TextMessage) msg).getContent())));
 	}
 
 	/**
@@ -90,5 +90,36 @@ public class Connection extends Thread {
 			outputStream.flush();
 		} catch (IOException ex) {
 		}
+	}
+	
+	/**
+	 * Methode zum verschlüsseln der Nachrichten
+	 * @param in verschlüsselter String
+	 * @return entschlüsslter String
+	 */
+	public String decrypt(String in) {
+		char[] chars = in.toCharArray();
+		int j = chars.length;
+		char[] chars2 = new char[j];
+		for (int i = 0; i <= j-1; i++){
+			chars2[j-1-i] = chars[i];
+		}
+		
+		return new String(chars2);
+	}
+
+	/**
+	 * Methode zum entschlüsseln der Nachrichten
+	 * @param in String
+	 * @return verschlüsslter String
+	 */
+	public String encrypt(String in){
+		char[] chars = in.toCharArray();
+		int j = chars.length;
+		char[] chars2 = new char[j];
+		for (int i = 0; i <= j-1; i++){
+			chars2[j-1-i] = chars[i];
+		}
+		return new String(chars2);
 	}
 }

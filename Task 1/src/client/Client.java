@@ -33,8 +33,7 @@ public class Client implements Runnable {
 
 	public Client(String host, int port) {
 		try {
-			System.out.println("Connecting to " + host + " (port " + port
-					+ ")...");
+			System.out.println("Connecting to " + host + " (port " + port + ")...");
 			Socket s = new Socket(host, port);
 			this.outputStream = new ObjectOutputStream((s.getOutputStream()));
 			this.inputStream = new ObjectInputStream((s.getInputStream()));
