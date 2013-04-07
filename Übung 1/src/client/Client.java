@@ -1,9 +1,12 @@
 package client;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -122,6 +125,7 @@ public class Client implements Runnable {
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
 			ChatLineListener listener = (ChatLineListener) iterator.next();
 			listener.newChatLine(line);
+			logger(line);
 		}
 	}
 
@@ -157,5 +161,15 @@ public class Client implements Runnable {
 			chars2[j-i] = chars[i];
 		}
 		return chars2.toString();	
+	}
+	
+	public void logger(String text){
+		try {
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_client.txt", true)));
+		    out.println(text);
+		    out.close();
+		} catch (IOException e) {
+
+		}
 	}
 }

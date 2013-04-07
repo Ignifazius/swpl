@@ -1,6 +1,9 @@
 package server;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
@@ -64,6 +67,7 @@ public class Server {
 			for (Iterator iterator = connections.iterator(); iterator.hasNext();) {
 				Connection connection = (Connection) iterator.next();
 				connection.send(text);
+				logger(text);
 			}
 		}
 	}
@@ -76,6 +80,16 @@ public class Server {
 	 */
 	public void removeConnection(Connection connection) {
 		connections.remove(connection);
+	}
+	
+	public void logger(String text){
+		try {
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_server.txt", true)));
+		    out.println(text);
+		    out.close();
+		} catch (IOException e) {
+
+		}
 	}
 
 }
