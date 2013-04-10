@@ -115,7 +115,6 @@ public class Connection extends Thread {
 				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
 				if (alphabet.charAt(y) == chars2[i]){
 					chars3[i] = alphabet.charAt((y+x-13)%x);
-					System.out.println(chars3[i]);
 					break;
 				}
 			}
@@ -126,7 +125,7 @@ public class Connection extends Thread {
 	}
 
 	/**
-	 * Methode zum entschlüsseln der Nachrichten
+	 * Methode zum verschlüsseln der Nachrichten
 	 * @param in String
 	 * @return verschlüsslter String
 	 */
@@ -144,7 +143,6 @@ public class Connection extends Thread {
 				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
 				if (alphabet.charAt(y) == chars[i]){
 					chars2[i] = alphabet.charAt((y+x+13)%x);
-					System.out.println(chars2[i]);
 					break;
 				}
 			}
