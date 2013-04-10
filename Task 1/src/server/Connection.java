@@ -101,11 +101,28 @@ public class Connection extends Thread {
 		char[] chars = in.toCharArray();
 		int j = chars.length;
 		char[] chars2 = new char[j];
+		char[] chars3 = new char[j];
+		//Text umdrehen
 		for (int i = 0; i <= j-1; i++){
 			chars2[j-1-i] = chars[i];
 		}
 		
-		return new String(chars2);
+		//Rot13
+		String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+		int x = alphabet.length();
+		for (int i = 0; i <= j-1; i++){
+			for (int y = 0; y < x; y++){
+				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+				if (alphabet.charAt(y) == chars2[i]){
+					chars3[i] = alphabet.charAt((y+x-13)%x);
+					System.out.println(chars3[i]);
+					break;
+				}
+			}
+		}
+		
+		
+		return new String(chars3);
 	}
 
 	/**
@@ -117,9 +134,27 @@ public class Connection extends Thread {
 		char[] chars = in.toCharArray();
 		int j = chars.length;
 		char[] chars2 = new char[j];
+		char[] chars3 = new char[j];
+		
+		//Rot13
+		String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+		int x = alphabet.length();
 		for (int i = 0; i <= j-1; i++){
-			chars2[j-1-i] = chars[i];
+			for (int y = 0; y < x; y++){
+				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+				if (alphabet.charAt(y) == chars[i]){
+					chars2[i] = alphabet.charAt((y+x+13)%x);
+					System.out.println(chars2[i]);
+					break;
+				}
+			}
 		}
-		return new String(chars2);
+		
+		
+		//Text umdrehen
+		for (int i = 0; i <= j-1; i++){
+			chars3[j-1-i] = chars2[i];
+		}
+		return new String(chars3);
 	}
 }
