@@ -142,37 +142,6 @@ public class Client implements Runnable {
 		int j = chars.length;
 		char[] chars2 = new char[j];
 		char[] chars3 = new char[j];
-		for (int i = 0; i <= j-1; i++){
-			chars2[j-1-i] = chars[i];
-		}
-		
-		String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-		
-		int x = alphabet.length();
-		for (int i = 0; i <= j-1; i++){
-			for (int y = 0; y < x; y++){
-				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
-				if (alphabet.charAt(y) == chars2[i]){
-					chars3[i] = alphabet.charAt((y+x-13)%x);
-					System.out.println(chars3[i]);
-					break;
-				}
-			}
-		}
-		
-		return new String(chars3);
-	}
-
-	/**
-	 * Methode zum verschlüsseln der Nachrichten
-	 * @param in verschlüsselter String
-	 * @return entschlüsslter String
-	 */
-	public String decrypt(String in) {
-		char[] chars = in.toCharArray();
-		int j = chars.length;
-		char[] chars2 = new char[j];
-		char[] chars3 = new char[j];
 		//Text umdrehen
 		for (int i = 0; i <= j-1; i++){
 			chars2[j-1-i] = chars[i];
@@ -186,7 +155,6 @@ public class Client implements Runnable {
 				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
 				if (alphabet.charAt(y) == chars2[i]){
 					chars3[i] = alphabet.charAt((y+x-13)%x);
-					System.out.println(chars3[i]);
 					break;
 				}
 			}
@@ -215,7 +183,6 @@ public class Client implements Runnable {
 				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
 				if (alphabet.charAt(y) == chars[i]){
 					chars2[i] = alphabet.charAt((y+x+13)%x);
-					System.out.println(chars2[i]);
 					break;
 				}
 			}
@@ -227,5 +194,15 @@ public class Client implements Runnable {
 			chars3[j-1-i] = chars2[i];
 		}
 		return new String(chars3);
+	}
+	
+	public void logger(String text){
+		try {
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_server.txt", true)));
+		    out.println(text);
+		    out.close();
+		} catch (IOException e) {
+
+		}
 	}
 }
