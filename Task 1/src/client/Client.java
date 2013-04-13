@@ -224,7 +224,7 @@ public class Client implements Runnable {
 	
 	public void logger(String text){
 		try {
-		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_server.txt", true)));
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_client_" + ID + ".txt", true)));
 		    out.println(text);
 		    out.close();
 		} catch (IOException e) {
