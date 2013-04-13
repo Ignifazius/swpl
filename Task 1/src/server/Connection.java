@@ -68,8 +68,14 @@ public class Connection extends Thread {
 	 *            received message
 	 */
 	private void handleIncomingMessage(String name, Object msg) {
-		if (msg instanceof TextMessage)
+		if (msg instanceof TextMessage){
+			String text = decrypt(((TextMessage) msg).getContent());
+			if (text.matches("(password,)(\\d*)")){
+				String[] splitString = (text.split(","));
+				server.broadcast(encrypt("accepted," + splitString[1]));
+			}
 			server.broadcast(encrypt(name + " - " + decrypt(((TextMessage) msg).getContent())));
+		}
 	}
 
 	/**

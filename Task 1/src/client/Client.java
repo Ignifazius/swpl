@@ -25,6 +25,10 @@ public class Client implements Runnable {
 		new Gui("Chat " + args[0] + ":" + args[1], client);
 	}
 
+	public boolean authBoolSent = false;
+	public boolean authBoolRec = false;
+	public int ID = (int) (Math.random()*10000);
+	
 	protected ObjectInputStream inputStream;
 
 	protected ObjectOutputStream outputStream;
@@ -54,6 +58,10 @@ public class Client implements Runnable {
 				try {
 					Object msg = inputStream.readObject();
 					handleIncomingMessage(msg);
+					if (authBoolSent != true){
+						sendAuthRequest();
+						authBoolSent = true;
+					}
 				} catch (EOFException e) {
 					e.printStackTrace();
 				} catch (ClassNotFoundException e) {
@@ -80,14 +88,32 @@ public class Client implements Runnable {
 	 */
 	protected void handleIncomingMessage(Object msg) {
 		if (msg instanceof TextMessage) {
-			fireAddLine(decrypt(((TextMessage) msg).getContent()) + "\n");
+			String text = decrypt(((TextMessage) msg).getContent());
+			if (text.matches("(accepted,)(\\d*)")){
+				String[] splitted = text.split(",");
+				Integer recvID = Integer.parseInt(splitted[1]);
+				if (recvID == ID) {
+					authBoolRec = true;
+					System.out.println("Authentification successful. Your ID is " + ID);
+				}
+			} else {
+				fireAddLine(decrypt(((TextMessage) msg).getContent()) + "\n");
+			}
 		}
 	}
 
 	public void send(String line) {
-		send(new TextMessage(encrypt(line)));
+		if (authBoolRec){
+			send(new TextMessage(encrypt(line)));
+		}else{
+			System.out.println("No auth-token received. You can not send messages.");
+		}
 	}
 
+	public void sendAuthRequest(){
+		send(new TextMessage(encrypt("password," + ID)));
+	}
+	
 	public void send(TextMessage msg) {
 		try {
 			outputStream.writeObject(msg);
@@ -205,4 +231,6 @@ public class Client implements Runnable {
 
 		}
 	}
+	
+
 }

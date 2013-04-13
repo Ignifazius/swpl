@@ -34,6 +34,7 @@ public class Server {
 			System.out.println("Accepted from " + client.getInetAddress());
 			Connection c = connectTo(client);
 			c.start();
+
 		}
 	}
 
