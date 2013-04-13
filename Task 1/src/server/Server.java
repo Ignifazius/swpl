@@ -86,11 +86,43 @@ public class Server {
 	public void logger(String text){
 		try {
 		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_server.txt", true)));
-		    out.println(text);
+		    out.println(decrypt(text));
 		    out.close();
 		} catch (IOException e) {
 
 		}
+	}
+	
+	/**
+	 * Methode zum verschlüsseln der Nachrichten
+	 * @param in verschlüsselter String
+	 * @return entschlüsslter String
+	 */
+	public String decrypt(String in) {
+		char[] chars = in.toCharArray();
+		int j = chars.length;
+		char[] chars2 = new char[j];
+		char[] chars3 = new char[j];
+		//Text umdrehen
+		for (int i = 0; i <= j-1; i++){
+			chars2[j-1-i] = chars[i];
+		}
+		
+		//Rot13
+		String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+		int x = alphabet.length();
+		for (int i = 0; i <= j-1; i++){
+			for (int y = 0; y < x; y++){
+				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+				if (alphabet.charAt(y) == chars2[i]){
+					chars3[i] = alphabet.charAt((y+x-13)%x);
+					break;
+				}
+			}
+		}
+		
+		
+		return new String(chars3);
 	}
 
 }
