@@ -21,6 +21,9 @@ public class Client implements Runnable {
 	public static boolean encryption = false;
 	public static boolean color = false;
 	public static boolean auth = false;
+	public static boolean authBoolSent = false;
+	public static boolean authBoolRec = false;
+	public int ID = (int) (Math.random()*10000);
 	
 	public static void main(String args[]) throws IOException {
 		if (args.length == 2) {
@@ -40,6 +43,8 @@ public class Client implements Runnable {
 			}
 			if (Integer.parseInt(args[5]) == 1){
 				auth = true;
+			} else {
+				authBoolRec = true;
 			}
 		} else {
 			System.out.println("Syntax: ChatClient <host> <port>");
@@ -53,9 +58,7 @@ public class Client implements Runnable {
 		new Gui("Chat " + args[0] + ":" + args[1], client);
 	}
 
-	public boolean authBoolSent = false;
-	public boolean authBoolRec = false;
-	public int ID = (int) (Math.random()*10000);
+
 	
 	protected ObjectInputStream inputStream;
 

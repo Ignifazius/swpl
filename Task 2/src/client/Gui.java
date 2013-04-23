@@ -45,7 +45,10 @@ public class Gui extends JFrame implements ChatLineListener {
 	 */
 	public Gui(String title, Client chatClient) {
 		System.out.println("starting gui...");
-
+		outputTextbox = new JTextArea(Gui.rowstextarea, Gui.colstextarea);
+					outputTextbox.setEditable(false);
+					inputField = new JTextField();
+					inputField.addActionListener(getInput());
 		if (Client.getColorBool()) {
 			farbe = "[schwarz] | ";
 		
@@ -86,10 +89,7 @@ public class Gui extends JFrame implements ChatLineListener {
 			
 			
 			
-			outputTextbox = new JTextArea(Gui.rowstextarea, Gui.colstextarea);
-			outputTextbox.setEditable(false);
-			inputField = new JTextField();
-			inputField.addActionListener(getInput());
+			
 			
 			colorActionRed.addActionListener(new ActionListener() {
 	            public void actionPerformed(ActionEvent arg0) {
