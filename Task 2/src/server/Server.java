@@ -13,13 +13,50 @@ import java.util.Iterator;
  * server's main class. accepts incoming connections and allows broadcasting
  */
 public class Server {
-
+	public static boolean log = false;
+	public static boolean encryption = false;
+	public static boolean color = false;
+	public static boolean auth = false;
+	
 	public static void main(String args[]) throws IOException {
-		if (args.length != 1)
-			throw new RuntimeException("Syntax: ChatServer <port>");
+		if (args.length == 1) {
+			log = true;
+			encryption = true;
+			color = true;
+			auth = true;
+		} else if (args.length == 5){
+			if (Integer.parseInt(args[1]) == 1){
+				log = true;
+			}
+			if (Integer.parseInt(args[2]) == 1){
+				encryption = true;
+			}
+			if (Integer.parseInt(args[3]) == 1){ // hat hier keine AUswirkungen. Tortzdem in der Liste um schnelle, clientgleiche konfiguration zu erreichen
+				color = true;
+			}
+			if (Integer.parseInt(args[4]) == 1){
+				auth = true;
+			}
+		} else {
+			System.out.println("Syntax: ChatServer <port>");
+			System.out.println("oder");
+			System.out.println("Syntax: ChatServer <port> <log> <enryption> <color> <authentification>");
+			System.out.println("Wobei die Argumente 3-6 optional sind und durch '1' -> 'aktiviert' und '0' -> 'deaktiviert' definiert sind");
+			System.exit(0);
+		}
 		new Server(Integer.parseInt(args[0]));
 	}
 
+	
+	public static boolean getEncBool(){
+		return encryption;
+	}
+	
+	public static boolean getAuthBool() {
+		return auth;
+	}
+	
+	
 	/**
 	 * awaits incoming connections and creates Connection objects accordingly.
 	 * 
@@ -84,12 +121,14 @@ public class Server {
 	}
 	
 	public void logger(String text){
-		try {
-		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_server.txt", true)));
-		    out.println(decrypt(text));
-		    out.close();
-		} catch (IOException e) {
-
+		if (log) {
+			try {
+			    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_server.txt", true)));
+			    out.println(decrypt(text));
+			    out.close();
+			} catch (IOException e) {
+	
+			}
 		}
 	}
 	
@@ -99,30 +138,32 @@ public class Server {
 	 * @return entschlüsslter String
 	 */
 	public String decrypt(String in) {
-		char[] chars = in.toCharArray();
-		int j = chars.length;
-		char[] chars2 = new char[j];
-		char[] chars3 = new char[j];
-		//Text umdrehen
-		for (int i = 0; i <= j-1; i++){
-			chars2[j-1-i] = chars[i];
-		}
-		
-		//Rot13
-		String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-		int x = alphabet.length();
-		for (int i = 0; i <= j-1; i++){
-			for (int y = 0; y < x; y++){
-				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
-				if (alphabet.charAt(y) == chars2[i]){
-					chars3[i] = alphabet.charAt((y+x-13)%x);
-					break;
+		if (encryption){
+			char[] chars = in.toCharArray();
+			int j = chars.length;
+			char[] chars2 = new char[j];
+			char[] chars3 = new char[j];
+			//Text umdrehen
+			for (int i = 0; i <= j-1; i++){
+				chars2[j-1-i] = chars[i];
+			}
+			
+			//Rot13
+			String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+			int x = alphabet.length();
+			for (int i = 0; i <= j-1; i++){
+				for (int y = 0; y < x; y++){
+					//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+					if (alphabet.charAt(y) == chars2[i]){
+						chars3[i] = alphabet.charAt((y+x-13)%x);
+						break;
+					}
 				}
 			}
-		}
-		
-		
-		return new String(chars3);
-	}
 
+			return new String(chars3);
+		} else {
+			return in;
+		}
+	}
 }

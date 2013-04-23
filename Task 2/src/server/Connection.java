@@ -70,9 +70,11 @@ public class Connection extends Thread {
 	private void handleIncomingMessage(String name, Object msg) {
 		if (msg instanceof TextMessage){
 			String text = decrypt(((TextMessage) msg).getContent());
-			if (text.matches("(password,)(\\d*)")){
-				String[] splitString = (text.split(","));
-				server.broadcast(encrypt("accepted," + splitString[1]));
+			if (Server.getAuthBool()) {
+				if (text.matches("(password,)(\\d*)")){
+					String[] splitString = (text.split(","));
+					server.broadcast(encrypt("accepted," + splitString[1]));
+				}
 			}
 			server.broadcast(encrypt(name + " - " + decrypt(((TextMessage) msg).getContent())));
 		}
@@ -104,30 +106,34 @@ public class Connection extends Thread {
 	 * @return entschlüsslter String
 	 */
 	public String decrypt(String in) {
-		char[] chars = in.toCharArray();
-		int j = chars.length;
-		char[] chars2 = new char[j];
-		char[] chars3 = new char[j];
-		//Text umdrehen
-		for (int i = 0; i <= j-1; i++){
-			chars2[j-1-i] = chars[i];
-		}
-		
-		//Rot13
-		String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-		int x = alphabet.length();
-		for (int i = 0; i <= j-1; i++){
-			for (int y = 0; y < x; y++){
-				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
-				if (alphabet.charAt(y) == chars2[i]){
-					chars3[i] = alphabet.charAt((y+x-13)%x);
-					break;
+		if (Server.getEncBool()){
+			char[] chars = in.toCharArray();
+			int j = chars.length;
+			char[] chars2 = new char[j];
+			char[] chars3 = new char[j];
+			//Text umdrehen
+			for (int i = 0; i <= j-1; i++){
+				chars2[j-1-i] = chars[i];
+			}
+			
+			//Rot13
+			String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+			int x = alphabet.length();
+			for (int i = 0; i <= j-1; i++){
+				for (int y = 0; y < x; y++){
+					//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+					if (alphabet.charAt(y) == chars2[i]){
+						chars3[i] = alphabet.charAt((y+x-13)%x);
+						break;
+					}
 				}
 			}
+			
+			
+			return new String(chars3);
+		} else {
+			return in;	
 		}
-		
-		
-		return new String(chars3);
 	}
 
 	/**
@@ -136,29 +142,33 @@ public class Connection extends Thread {
 	 * @return verschlüsslter String
 	 */
 	public String encrypt(String in){
-		char[] chars = in.toCharArray();
-		int j = chars.length;
-		char[] chars2 = new char[j];
-		char[] chars3 = new char[j];
-		
-		//Rot13
-		String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-		int x = alphabet.length();
-		for (int i = 0; i <= j-1; i++){
-			for (int y = 0; y < x; y++){
-				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
-				if (alphabet.charAt(y) == chars[i]){
-					chars2[i] = alphabet.charAt((y+x+13)%x);
-					break;
+		if (Server.getEncBool()){		
+			char[] chars = in.toCharArray();
+			int j = chars.length;
+			char[] chars2 = new char[j];
+			char[] chars3 = new char[j];
+			
+			//Rot13
+			String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+			int x = alphabet.length();
+			for (int i = 0; i <= j-1; i++){
+				for (int y = 0; y < x; y++){
+					//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+					if (alphabet.charAt(y) == chars[i]){
+						chars2[i] = alphabet.charAt((y+x+13)%x);
+						break;
+					}
 				}
 			}
+			
+			
+			//Text umdrehen
+			for (int i = 0; i <= j-1; i++){
+				chars3[j-1-i] = chars2[i];
+			}
+			return new String(chars3);
+		} else {
+			return in;
 		}
-		
-		
-		//Text umdrehen
-		for (int i = 0; i <= j-1; i++){
-			chars3[j-1-i] = chars2[i];
-		}
-		return new String(chars3);
 	}
 }

@@ -214,7 +214,7 @@ public class Client implements Runnable {
 	 * @return entschlüsslter String
 	 */
 	public String decrypt(String in) {
-		if (auth){
+		if (encryption){
 			char[] chars = in.toCharArray();
 			int j = chars.length;
 			char[] chars2 = new char[j];
@@ -250,7 +250,7 @@ public class Client implements Runnable {
 	 * @return verschlüsslter String
 	 */
 	public String encrypt(String in){
-		if (auth) {
+		if (encryption) {
 			char[] chars = in.toCharArray();
 			int j = chars.length;
 			char[] chars2 = new char[j];
