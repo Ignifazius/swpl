@@ -17,10 +17,38 @@ import common.TextMessage;
  * simple chat client
  */
 public class Client implements Runnable {
+	public static boolean log = false;
+	public static boolean encryption = false;
+	public static boolean color = false;
+	public static boolean auth = false;
+	
 	public static void main(String args[]) throws IOException {
-		if (args.length != 2)
-			throw new RuntimeException("Syntax: ChatClient <host> <port>");
-
+		if (args.length == 2) {
+			log = true;
+			encryption = true;
+			color = true;
+			auth = true;
+		} else if (args.length == 6){
+			if (Integer.parseInt(args[2]) == 1){
+				log = true;
+			}
+			if (Integer.parseInt(args[3]) == 1){
+				encryption = true;
+			}
+			if (Integer.parseInt(args[4]) == 1){
+				color = true;
+			}
+			if (Integer.parseInt(args[5]) == 1){
+				auth = true;
+			}
+		} else {
+			System.out.println("Syntax: ChatClient <host> <port>");
+			System.out.println("oder");
+			System.out.println("Syntax: ChatClient <host> <port> <log> <enryption> <color> <authentification>");
+			System.out.println("Wobei die Argumente 3-6 optional sind und durch '1' -> 'aktiviert' und '0' -> 'deaktiviert' definiert sind");
+			System.exit(0);
+		}
+		
 		Client client = new Client(args[0], Integer.parseInt(args[1]));
 		new Gui("Chat " + args[0] + ":" + args[1], client);
 	}
@@ -59,7 +87,9 @@ public class Client implements Runnable {
 					Object msg = inputStream.readObject();
 					handleIncomingMessage(msg);
 					if (authBoolSent != true){
-						sendAuthRequest();
+						if (auth){
+							sendAuthRequest();
+						}
 						authBoolSent = true;
 					}
 				} catch (EOFException e) {
@@ -80,6 +110,23 @@ public class Client implements Runnable {
 		}
 	}
 
+	
+	public static boolean getLogBool(){
+		return log;
+	}
+	
+	public static boolean getAuthBool(){
+		return auth;
+	}
+	
+	public static boolean getEncBool(){
+		return encryption;
+	}
+	
+	public static boolean getColorBool(){
+		return color;
+	}
+	
 	/**
 	 * decides what to do with incoming messages
 	 * 
@@ -164,30 +211,34 @@ public class Client implements Runnable {
 	 * @return entschlüsslter String
 	 */
 	public String decrypt(String in) {
-		char[] chars = in.toCharArray();
-		int j = chars.length;
-		char[] chars2 = new char[j];
-		char[] chars3 = new char[j];
-		//Text umdrehen
-		for (int i = 0; i <= j-1; i++){
-			chars2[j-1-i] = chars[i];
-		}
-		
-		//Rot13
-		String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-		int x = alphabet.length();
-		for (int i = 0; i <= j-1; i++){
-			for (int y = 0; y < x; y++){
-				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
-				if (alphabet.charAt(y) == chars2[i]){
-					chars3[i] = alphabet.charAt((y+x-13)%x);
-					break;
+		if (auth){
+			char[] chars = in.toCharArray();
+			int j = chars.length;
+			char[] chars2 = new char[j];
+			char[] chars3 = new char[j];
+			//Text umdrehen
+			for (int i = 0; i <= j-1; i++){
+				chars2[j-1-i] = chars[i];
+			}
+			
+			//Rot13
+			String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+			int x = alphabet.length();
+			for (int i = 0; i <= j-1; i++){
+				for (int y = 0; y < x; y++){
+					//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+					if (alphabet.charAt(y) == chars2[i]){
+						chars3[i] = alphabet.charAt((y+x-13)%x);
+						break;
+					}
 				}
 			}
+			return new String(chars3);
+		} else {
+			return in;
 		}
 		
 		
-		return new String(chars3);
 	}
 
 	/**
@@ -196,39 +247,45 @@ public class Client implements Runnable {
 	 * @return verschlüsslter String
 	 */
 	public String encrypt(String in){
-		char[] chars = in.toCharArray();
-		int j = chars.length;
-		char[] chars2 = new char[j];
-		char[] chars3 = new char[j];
-		
-		//Rot13
-		String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-		int x = alphabet.length();
-		for (int i = 0; i <= j-1; i++){
-			for (int y = 0; y < x; y++){
-				//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
-				if (alphabet.charAt(y) == chars[i]){
-					chars2[i] = alphabet.charAt((y+x+13)%x);
-					break;
+		if (auth) {
+			char[] chars = in.toCharArray();
+			int j = chars.length;
+			char[] chars2 = new char[j];
+			char[] chars3 = new char[j];
+			
+			//Rot13
+			String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+			int x = alphabet.length();
+			for (int i = 0; i <= j-1; i++){
+				for (int y = 0; y < x; y++){
+					//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+					if (alphabet.charAt(y) == chars[i]){
+						chars2[i] = alphabet.charAt((y+x+13)%x);
+						break;
+					}
 				}
 			}
+			
+			
+			//Text umdrehen
+			for (int i = 0; i <= j-1; i++){
+				chars3[j-1-i] = chars2[i];
+			}
+			return new String(chars3);
+		} else {
+			return in;
 		}
-		
-		
-		//Text umdrehen
-		for (int i = 0; i <= j-1; i++){
-			chars3[j-1-i] = chars2[i];
-		}
-		return new String(chars3);
 	}
 	
 	public void logger(String text){
-		try {
-		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_client_" + ID + ".txt", true)));
-		    out.println(text);
-		    out.close();
-		} catch (IOException e) {
-
+		if (log){
+			try {
+			    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_client_" + ID + ".txt", true)));
+			    out.println(text);
+			    out.close();
+			} catch (IOException e) {
+	
+			}
 		}
 	}
 	
