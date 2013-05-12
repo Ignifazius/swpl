@@ -7,9 +7,12 @@ import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Iterator;
+import java.util.Scanner;
 
 import common.TextMessage;
 
@@ -53,9 +56,29 @@ public class Client implements Runnable {
 			System.out.println("Wobei die Argumente 3-6 optional sind und durch '1' -> 'aktiviert' und '0' -> 'deaktiviert' definiert sind");
 			System.exit(0);
 		}
+		int mode = 0;
+		Scanner in = new Scanner(System.in);
+		System.out.println("Bitte wählen sie den Modus:\n[1] Konsole\n[2] GUI");
+		try{
+			mode = in.nextInt();
+		} catch (InputMismatchException ime) {
+			System.out.println("Bitte nur Zahlen eingeben. Exiting.");
+			System.exit(0);
+		}
+		in.close();
 		
-		Client client = new Client(args[0], Integer.parseInt(args[1]));
-		new Gui("Chat " + args[0] + ":" + args[1], client);
+		switch (mode) {
+		case 1:
+			//TODO
+			break;
+		case 2:
+			Client client = new Client(args[0], Integer.parseInt(args[1]));
+			new Gui("Chat " + args[0] + ":" + args[1], client);
+			break;
+		default:
+			System.out.println("Ungültige Eingabe. Exiting.");
+			break;
+		}
 	}
 
 
@@ -74,7 +97,10 @@ public class Client implements Runnable {
 			this.inputStream = new ObjectInputStream((s.getInputStream()));
 			thread = new Thread(this);
 			thread.start();
-		} catch (Exception e) {
+		} catch (ConnectException ce) {
+			System.out.println("Could not connect. Is the Server running?");
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	<featureModel chosenLayoutAlgorithm="1">
+		<struct>
+			<and abstract="true" mandatory="true" name="sple_chat_basis">
+				<and name="Base">
+					<alt mandatory="true" name="Mode">
+						<feature mandatory="true" name="Konsole"/>
+						<feature mandatory="true" name="GUI"/>
+					</alt>
+					<and name="Features">
+						<and name="Customization">
+							<feature name="Color"/>
+							<feature name="Font"/>
+						</and>
+						<feature name="Encryption"/>
+						<feature name="Log"/>
+						<feature name="Authentification"/>
+					</and>
+				</and>
+			</and>
+		</struct>
+		<constraints>
+			<rule>
+				<conj>
+					<disj>
+						<var>Konsole</var>
+						<var>Customization</var>
+					</disj>
+					<not>
+						<conj>
+							<var>Konsole</var>
+							<var>Customization</var>
+						</conj>
+					</not>
+				</conj>
+			</rule>
+		</constraints>
+		<comments/>
+		<featureOrder userDefined="false"/>
+	</featureModel>
