@@ -5,6 +5,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 /**
  * server's main class. accepts incoming connections and allows broadcasting
@@ -13,9 +16,6 @@ public class Server {
 	public static void main(String args[]) throws IOException {
 		if (args.length != 1) {
 			System.out.println("Syntax: ChatServer <port>");
-//			System.out.println("oder");
-//			System.out.println("Syntax: ChatServer <port> <log> <enryption> <color> <authentification>");
-//			System.out.println("Wobei die Argumente 3-6 optional sind und durch '1' -> 'aktiviert' und '0' -> 'deaktiviert' definiert sind");
 			System.exit(0);
 		}
 		new Server(Integer.parseInt(args[0]));

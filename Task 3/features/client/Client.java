@@ -8,7 +8,12 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
+
 import common.TextMessage;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 /**
  * simple chat client
@@ -21,13 +26,12 @@ public class Client implements Runnable {
 	/*end[Authentification]*/
 	
 	public static void main(String args[]) throws IOException {
-
-		/*if[GUI]*/
-			Client client = new Client(args[0], Integer.parseInt(args[1]));
+		Client client = new Client(args[0], Integer.parseInt(args[1]));
+		/*if[GUI]*/			
 			new Gui("Chat " + args[0] + ":" + args[1], client);
 		/*end[GUI]*/
 		/*if[Konsole]*/
-		//TODO
+			new Console(client);
 		/*end[Konsole]*/
 	}
 
@@ -61,6 +65,7 @@ public class Client implements Runnable {
 	public void run() {
 		try {
 			Thread thisthread = Thread.currentThread();
+			Scanner scan = new Scanner(System.in);
 			while (thread == thisthread) {
 				try {
 					Object msg = inputStream.readObject();
@@ -109,7 +114,8 @@ public class Client implements Runnable {
 				}
 			} else {
 			/*end[Authentification]*/
-				fireAddLine(decrypt(((TextMessage) msg).getContent()) + "\n");
+				fireAddLine(text + "\n");
+				//System.out.println("<" + text);
 			/*if[Authentification]*/
 				}
 			/*end[Authentification]*/
@@ -127,6 +133,7 @@ public class Client implements Runnable {
 		}
 		/*end[Authentification]*/
 	}
+	
 
 	public void sendAuthRequest(){
 		send(new TextMessage(encrypt("password," + ID)));
@@ -167,7 +174,13 @@ public class Client implements Runnable {
 	public void fireAddLine(String line) {
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
 			ChatLineListener listener = (ChatLineListener) iterator.next();
+			/*if[GUI]*/
 			listener.newChatLine(line);
+			/*end[GUI]*/
+			/*if[Konsole]*/
+			System.out.print(line);	
+			System.out.print(">");	
+			/*end[Konsole]*/
 			logger(line);
 		}
 	}
@@ -177,9 +190,9 @@ public class Client implements Runnable {
 	}
 	
 	/**
-	 * Methode zum verschlÃ¼sseln der Nachrichten
-	 * @param in verschlÃ¼sselter String
-	 * @return entschlÃ¼sslter String
+	 * Methode zum verschlüsseln der Nachrichten
+	 * @param in verschlüsselter String
+	 * @return entschlüsslter String
 	 */
 	public String decrypt(String in) {
 		String out = in;
@@ -211,9 +224,9 @@ public class Client implements Runnable {
 	}
 
 	/**
-	 * Methode zum entschlÃ¼sseln der Nachrichten
+	 * Methode zum entschlüsseln der Nachrichten
 	 * @param in String
-	 * @return verschlÃ¼sslter String
+	 * @return verschlüsslter String
 	 */
 	public String encrypt(String in){
 		String out = in;
@@ -247,6 +260,12 @@ public class Client implements Runnable {
 		
 	}
 	
+	
+	public void newChatLine(String line) {
+		System.out.println(" < " + line);
+		//System.out.print(">");
+	}
+	
 	public void logger(String text){
 		/*if[Log]*/
 			try {
@@ -259,5 +278,25 @@ public class Client implements Runnable {
 		/*end[Log]*/
 	}
 	
+	
+
+//	class ListenFromServer extends Thread {
+//		public void run() {
+//			while(true) {
+//				try {
+//					String msg = (String) inputStream.readObject();
+//					System.out.println(msg);
+//					System.out.print("> ");
+//				}
+//				catch(IOException e) {
+//					System.out.println("Server has close the connection: " + e);
+//				}
+//				// can't happen with a String object but need the catch anyhow
+//				catch(ClassNotFoundException e2) {
+//				}
+//			}
+//		}
+//	}
 
 }
+

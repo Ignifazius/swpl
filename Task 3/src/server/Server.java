@@ -5,6 +5,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 /**
  * server's main class. accepts incoming connections and allows broadcasting
@@ -13,9 +16,6 @@ public class Server {
 	public static void main(String args[]) throws IOException {
 		if (args.length != 1) {
 			System.out.println("Syntax: ChatServer <port>");
-//			System.out.println("oder");
-//			System.out.println("Syntax: ChatServer <port> <log> <enryption> <color> <authentification>");
-//			System.out.println("Wobei die Argumente 3-6 optional sind und durch '1' -> 'aktiviert' und '0' -> 'deaktiviert' definiert sind");
 			System.exit(0);
 		}
 		new Server(Integer.parseInt(args[0]));
@@ -87,14 +87,14 @@ public class Server {
 	
 	public void logger(String text){
 		
-
-
-
-
-
-
-
-
+			try {
+			    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_server.txt", true)));
+			    out.println(decrypt(text));
+			    out.close();
+			} catch (IOException e) {
+	
+			}
+		
 	}
 	
 	/**
@@ -105,31 +105,31 @@ public class Server {
 	public String decrypt(String in) {
 		String out = in;
 		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			char[] chars = in.toCharArray();
+			int j = chars.length;
+			char[] chars2 = new char[j];
+			char[] chars3 = new char[j];
+			//Text umdrehen
+			for (int i = 0; i <= j-1; i++){
+				chars2[j-1-i] = chars[i];
+			}
+			
+			//Rot13
+			String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+			int x = alphabet.length();
+			for (int i = 0; i <= j-1; i++){
+				for (int y = 0; y < x; y++){
+					//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+					if (alphabet.charAt(y) == chars2[i]){
+						chars3[i] = alphabet.charAt((y+x-13)%x);
+						break;
+					}
+				}
+			}
+			
+			
+			out = new String(chars3);
+		
 			return out;	
 		
 	}
@@ -141,32 +141,32 @@ public class Server {
 	 */
 	public String encrypt(String in){
 		String out = in;
+				
+			char[] chars = in.toCharArray();
+			int j = chars.length;
+			char[] chars2 = new char[j];
+			char[] chars3 = new char[j];
+			
+			//Rot13
+			String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+			int x = alphabet.length();
+			for (int i = 0; i <= j-1; i++){
+				for (int y = 0; y < x; y++){
+					//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+					if (alphabet.charAt(y) == chars[i]){
+						chars2[i] = alphabet.charAt((y+x+13)%x);
+						break;
+					}
+				}
+			}
+			
+			
+			//Text umdrehen
+			for (int i = 0; i <= j-1; i++){
+				chars3[j-1-i] = chars2[i];
+			}
+			out = new String(chars3);
 		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			return out;
 	}
 }
