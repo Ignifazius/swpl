@@ -21,20 +21,20 @@ import common.TextMessage;
  */
 public class Client implements Runnable {
 	public int ID = (int) (Math.random()*10000);
-	
-
-
-
+	/*if[Authentification]*/
+	boolean authBoolSent = false;
+	boolean authBoolRec = false;
+	/*end[Authentification]*/
 	
 	public static void main(String args[]) throws IOException {
 
-		
+		/*if[GUI]*/
 			Client client = new Client(args[0], Integer.parseInt(args[1]));
 			new Gui("Chat " + args[0] + ":" + args[1], client);
+		/*end[GUI]*/
+		/*if[Konsole]*/
 		
-		
-
-
+		/*end[Konsole]*/
 	}
 
 
@@ -71,12 +71,12 @@ public class Client implements Runnable {
 				try {
 					Object msg = inputStream.readObject();
 					handleIncomingMessage(msg);
-					
-
-
-
-
-
+					/*if[Authentification]*/
+					if (authBoolSent != true){
+						sendAuthRequest();
+						authBoolSent = true;
+					}
+					/*end[Authentification]*/
 				} catch (EOFException e) {
 					e.printStackTrace();
 				} catch (ClassNotFoundException e) {
@@ -105,33 +105,33 @@ public class Client implements Runnable {
 	protected void handleIncomingMessage(Object msg) {
 		if (msg instanceof TextMessage) {
 			String text = decrypt(((TextMessage) msg).getContent());
-			
-
-
-
-
-
-
-
-
-
+			/*if[Authentification]*/
+			if (text.matches("(accepted,)(\\d*)")){
+				String[] splitted = text.split(",");
+				Integer recvID = Integer.parseInt(splitted[1]);
+				if (recvID == ID) {					
+					authBoolRec = true;
+					System.out.println("Authentification successful. Your ID is " + ID);
+				}
+			} else {
+			/*end[Authentification]*/
 				fireAddLine(decrypt(((TextMessage) msg).getContent()) + "\n");
-			
-
-
+			/*if[Authentification]*/
+				}
+			/*end[Authentification]*/
 		}
 	}
 
 	public void send(String line) {
-		
-
-
+		/*if[Authentification]*/
+		if (authBoolRec){
+		/*end[Authentification]*/
 			send(new TextMessage(encrypt(line)));
-		
-
-
-
-
+		/*if[Authentification]*/
+		}else{
+			System.out.println("No auth-token received. You can not send messages.");
+		}
+		/*end[Authentification]*/
 	}
 
 	public void sendAuthRequest(){
@@ -189,30 +189,30 @@ public class Client implements Runnable {
 	 */
 	public String decrypt(String in) {
 		String out = in;
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		/*if[Encryption]*/
+			char[] chars = in.toCharArray();
+			int j = chars.length;
+			char[] chars2 = new char[j];
+			char[] chars3 = new char[j];
+			//Text umdrehen
+			for (int i = 0; i <= j-1; i++){
+				chars2[j-1-i] = chars[i];
+			}
+			
+			//Rot13
+			String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+			int x = alphabet.length();
+			for (int i = 0; i <= j-1; i++){
+				for (int y = 0; y < x; y++){
+					//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+					if (alphabet.charAt(y) == chars2[i]){
+						chars3[i] = alphabet.charAt((y+x-13)%x);
+						break;
+					}
+				}
+			}
+			out = new String(chars3);			
+		/*end[Encryption]*/
 			return out;
 	}
 
@@ -223,46 +223,46 @@ public class Client implements Runnable {
 	 */
 	public String encrypt(String in){
 		String out = in;
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		/*if[Encryption]*/
+			char[] chars = in.toCharArray();
+			int j = chars.length;
+			char[] chars2 = new char[j];
+			char[] chars3 = new char[j];
+			
+			//Rot13
+			String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+			int x = alphabet.length();
+			for (int i = 0; i <= j-1; i++){
+				for (int y = 0; y < x; y++){
+					//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
+					if (alphabet.charAt(y) == chars[i]){
+						chars2[i] = alphabet.charAt((y+x+13)%x);
+						break;
+					}
+				}
+			}
+			
+			
+			//Text umdrehen
+			for (int i = 0; i <= j-1; i++){
+				chars3[j-1-i] = chars2[i];
+			}
+			out = new String(chars3);
+		/*end[Encryption]*/
 			return out;
 		
 	}
 	
 	public void logger(String text){
-		
-
-
-
-
-
-
-
-
+		/*if[Log]*/
+			try {
+			    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_client_" + ID + ".txt", true)));
+			    out.println(text);
+			    out.close();
+			} catch (IOException e) {
+	
+			}
+		/*end[Log]*/
 	}
 	
 
