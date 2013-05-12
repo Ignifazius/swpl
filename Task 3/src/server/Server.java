@@ -1,9 +1,6 @@
 package server;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
@@ -16,9 +13,9 @@ public class Server {
 	public static void main(String args[]) throws IOException {
 		if (args.length != 1) {
 			System.out.println("Syntax: ChatServer <port>");
-			System.out.println("oder");
-			System.out.println("Syntax: ChatServer <port> <log> <enryption> <color> <authentification>");
-			System.out.println("Wobei die Argumente 3-6 optional sind und durch '1' -> 'aktiviert' und '0' -> 'deaktiviert' definiert sind");
+//			System.out.println("oder");
+//			System.out.println("Syntax: ChatServer <port> <log> <enryption> <color> <authentification>");
+//			System.out.println("Wobei die Argumente 3-6 optional sind und durch '1' -> 'aktiviert' und '0' -> 'deaktiviert' definiert sind");
 			System.exit(0);
 		}
 		new Server(Integer.parseInt(args[0]));
@@ -101,9 +98,9 @@ public class Server {
 	}
 	
 	/**
-	 * Methode zum verschlÃ¼sseln der Nachrichten
-	 * @param in verschlÃ¼sselter String
-	 * @return entschlÃ¼sslter String
+	 * Methode zum verschlüsseln der Nachrichten
+	 * @param in verschlüsselter String
+	 * @return entschlüsslter String
 	 */
 	public String decrypt(String in) {
 		String out = in;
@@ -138,9 +135,9 @@ public class Server {
 	}
 
 	/**
-	 * Methode zum verschlÃ¼sseln der Nachrichten
+	 * Methode zum verschlüsseln der Nachrichten
 	 * @param in String
-	 * @return verschlÃ¼sslter String
+	 * @return verschlüsslter String
 	 */
 	public String encrypt(String in){
 		String out = in;

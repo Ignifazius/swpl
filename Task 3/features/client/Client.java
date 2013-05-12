@@ -1,19 +1,13 @@
 package client;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Iterator;
-import java.util.Scanner;
-
 import common.TextMessage;
 
 /**
@@ -33,7 +27,7 @@ public class Client implements Runnable {
 			new Gui("Chat " + args[0] + ":" + args[1], client);
 		/*end[GUI]*/
 		/*if[Konsole]*/
-		
+		//TODO
 		/*end[Konsole]*/
 	}
 

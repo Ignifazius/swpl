@@ -2,20 +2,16 @@
 	<featureModel chosenLayoutAlgorithm="1">
 		<struct>
 			<and abstract="true" mandatory="true" name="chat">
-				<alt mandatory="true" name="Mode">
+				<alt abstract="true" mandatory="true" name="Mode">
 					<feature mandatory="true" name="Konsole"/>
 					<and mandatory="true" name="GUI">
-						<and name="Customizations">
-							<feature name="Color"/>
-							<feature name="Font"/>
-						</and>
+						<feature name="Color"/>
+						<feature name="Font"/>
 					</and>
 				</alt>
-				<and name="Features">
-					<feature name="Authentification"/>
-					<feature name="Log"/>
-					<feature name="Encryption"/>
-				</and>
+				<feature name="Authentification"/>
+				<feature name="Log"/>
+				<feature name="Encryption"/>
 			</and>
 		</struct>
 		<constraints/>

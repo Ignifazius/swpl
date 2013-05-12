@@ -71,12 +71,15 @@ public class Connection extends Thread {
 		if (msg instanceof TextMessage){
 			String text = decrypt(((TextMessage) msg).getContent());
 			/*if[Authentification]*/
-				if (text.matches("(password,)(\\d*)")){
-					String[] splitString = (text.split(","));
-					server.broadcast(encrypt("accepted," + splitString[1]));
-				}
+			if (text.matches("(password,)(\\d*)")){
+				String[] splitString = text.split(",");
+				server.broadcast(encrypt("accepted," + splitString[1]));
+			} else {
 			/*end[Authentification]*/
-			server.broadcast(encrypt(name + " - " + decrypt(((TextMessage) msg).getContent())));
+				server.broadcast(encrypt(name + " - " + text));
+			/*if[Authentification]*/
+			}
+			/*end[Authentification]*/
 		}
 	}
 

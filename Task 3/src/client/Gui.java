@@ -9,12 +9,11 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.GroupLayout;
-import client.*;
+
 
 
 /**
@@ -31,12 +30,13 @@ public class Gui extends JFrame implements ChatLineListener {
 	private static int colstextarea = 60;
 
 	private Client chatClient;
-	/*if [Color]*/
-	private String farbe = "[schwarz] | ";
-	/*end [Color]*/
-	private String fontItalic = "";
-	private String fontBold = "";
 	
+
+
+	
+
+
+
 	
 	
 	/**
@@ -53,8 +53,7 @@ public class Gui extends JFrame implements ChatLineListener {
 					outputTextbox.setEditable(false);
 					inputField = new JTextField();
 					inputField.addActionListener(getInput());
-		/*if [Color]*/
-			farbe = "[schwarz] ";
+		
 			
 			// Creates a menubar for a JFrame
 	        JMenuBar menuBar = new JMenuBar();
@@ -64,85 +63,89 @@ public class Gui extends JFrame implements ChatLineListener {
 	        
 	        // Define and add two drop down menu to the menubar
 	        JMenu fileMenu = new JMenu("Datei");
-	        JMenu colorMenu = new JMenu("Farbe");
-	        JMenu fontMenu = new JMenu("Schriftart");
 	        menuBar.add(fileMenu);
-	        menuBar.add(colorMenu);
-	        menuBar.add(fontMenu);
-	
-	
-			ButtonGroup colorGroup = new ButtonGroup();
-			ButtonGroup fontGroup = new ButtonGroup();
-	
-			JRadioButtonMenuItem colorActionBlack = new JRadioButtonMenuItem("schwarz");
-	        colorMenu.add(colorActionBlack);
-	        colorGroup.add(colorActionBlack);
-			
-	        JRadioButtonMenuItem colorActionRed = new JRadioButtonMenuItem("rot");
-	        colorMenu.add(colorActionRed);
-	        colorGroup.add(colorActionRed);
 	        
-	        JRadioButtonMenuItem colorActionBlue = new JRadioButtonMenuItem("blau");
-	        colorMenu.add(colorActionBlue);
-	        colorGroup.add(colorActionBlue);
 	        
-	        JRadioButtonMenuItem colorActionGreen = new JRadioButtonMenuItem("grün");
-	        colorMenu.add(colorActionGreen);
-	        colorGroup.add(colorActionGreen);
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	        
-	        colorActionBlack.setSelected(true);
 	        
-	        JCheckBoxMenuItem fontActionItalic = new JCheckBoxMenuItem("italic");
-	        fontMenu.add(fontActionItalic);
-	        fontGroup.add(fontActionItalic);
 	        
-	        JCheckBoxMenuItem fontActionBold = new JCheckBoxMenuItem("bold");
-	        fontMenu.add(fontActionBold);
-	        fontGroup.add(fontActionBold);
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			
-			
-			
-			
-			
-			
-			colorActionRed.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent arg0) {
-	                farbe = "[rot] ";
-	            }
-	        });
-			
-			colorActionBlack.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent arg0) {
-	                farbe = "[schwarz] ";
-	            }
-	        });
-			
-			colorActionBlue.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent arg0) {
-	                farbe = "[blau] ";
-	            }
-	        });
-			
-			colorActionGreen.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent arg0) {
-	                farbe = "[grün] ";
-	            }
-	        });
-			
-			
-			fontActionItalic.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent arg0) {
-	            	fontItalic = "(italic) ";
-	            }
-	        });
-			
-			fontActionBold.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent arg0) {
-	            	fontItalic = "(bold) ";
-	            }
-	        });
-		/*end [Color]*/
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 		layout.setAutoCreateGaps(true);
@@ -176,7 +179,7 @@ public class Gui extends JFrame implements ChatLineListener {
 	private ActionListener getInput() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				chatClient.send((String) /*if [Color]*/farbe + /*end [Color]*/ fontItalic + fontBold + "| " + inputField.getText());
+				chatClient.send((String)  "| " + inputField.getText());
 				inputField.setText("");
 			}
 		};

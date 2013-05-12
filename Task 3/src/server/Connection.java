@@ -76,7 +76,10 @@ public class Connection extends Thread {
 
 
 
-			server.broadcast(encrypt(name + " - " + decrypt(((TextMessage) msg).getContent())));
+				server.broadcast(encrypt(name + " - " + text));
+			
+
+
 		}
 	}
 
