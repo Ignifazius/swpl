@@ -21,18 +21,18 @@ import java.io.PrintWriter;
 public class Client implements Runnable {
 	public int ID = (int) (Math.random()*10000);
 	
-	boolean authBoolSent = false;
-	boolean authBoolRec = false;
-	
+
+
+
 	
 	public static void main(String args[]) throws IOException {
 		Client client = new Client(args[0], Integer.parseInt(args[1]));
+					
+			new Gui("Chat " + args[0] + ":" + args[1], client);
+		
 		
 
 
-		
-			new Console(client);
-		
 	}
 
 
@@ -71,11 +71,11 @@ public class Client implements Runnable {
 					Object msg = inputStream.readObject();
 					handleIncomingMessage(msg);
 					
-					if (authBoolSent != true){
-						sendAuthRequest();
-						authBoolSent = true;
-					}
-					
+
+
+
+
+
 				} catch (EOFException e) {
 					e.printStackTrace();
 				} catch (ClassNotFoundException e) {
@@ -105,33 +105,33 @@ public class Client implements Runnable {
 		if (msg instanceof TextMessage) {
 			String text = decrypt(((TextMessage) msg).getContent());
 			
-			if (text.matches("(accepted,)(\\d*)")){
-				String[] splitted = text.split(",");
-				Integer recvID = Integer.parseInt(splitted[1]);
-				if (recvID == ID) {					
-					authBoolRec = true;
-					System.out.println("Authentification successful. Your ID is " + ID);
-				}
-			} else {
-			
+
+
+
+
+
+
+
+
+
 				fireAddLine(text + "\n");
 				//System.out.println("<" + text);
 			
-				}
-			
+
+
 		}
 	}
 
 	public void send(String line) {
 		
-		if (authBoolRec){
-		
+
+
 			send(new TextMessage(encrypt(line)));
 		
-		}else{
-			System.out.println("No auth-token received. You can not send messages.");
-		}
-		
+
+
+
+
 	}
 	
 
@@ -175,12 +175,12 @@ public class Client implements Runnable {
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
 			ChatLineListener listener = (ChatLineListener) iterator.next();
 			
+			listener.newChatLine(line);
+			
+			
 
 
-			
-			System.out.print(line);	
-			System.out.print(">");	
-			
+
 			logger(line);
 		}
 	}
@@ -197,29 +197,29 @@ public class Client implements Runnable {
 	public String decrypt(String in) {
 		String out = in;
 		
-			char[] chars = in.toCharArray();
-			int j = chars.length;
-			char[] chars2 = new char[j];
-			char[] chars3 = new char[j];
-			//Text umdrehen
-			for (int i = 0; i <= j-1; i++){
-				chars2[j-1-i] = chars[i];
-			}
-			
-			//Rot13
-			String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-			int x = alphabet.length();
-			for (int i = 0; i <= j-1; i++){
-				for (int y = 0; y < x; y++){
-					//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
-					if (alphabet.charAt(y) == chars2[i]){
-						chars3[i] = alphabet.charAt((y+x-13)%x);
-						break;
-					}
-				}
-			}
-			out = new String(chars3);			
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			return out;
 	}
 
@@ -231,31 +231,31 @@ public class Client implements Runnable {
 	public String encrypt(String in){
 		String out = in;
 		
-			char[] chars = in.toCharArray();
-			int j = chars.length;
-			char[] chars2 = new char[j];
-			char[] chars3 = new char[j];
-			
-			//Rot13
-			String alphabet = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-			int x = alphabet.length();
-			for (int i = 0; i <= j-1; i++){
-				for (int y = 0; y < x; y++){
-					//System.out.println("[" + alphabet.charAt(y) + "] [" + chars[i] + "]");
-					if (alphabet.charAt(y) == chars[i]){
-						chars2[i] = alphabet.charAt((y+x+13)%x);
-						break;
-					}
-				}
-			}
-			
-			
-			//Text umdrehen
-			for (int i = 0; i <= j-1; i++){
-				chars3[j-1-i] = chars2[i];
-			}
-			out = new String(chars3);
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			return out;
 		
 	}
@@ -268,14 +268,14 @@ public class Client implements Runnable {
 	
 	public void logger(String text){
 		
-			try {
-			    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_client_" + ID + ".txt", true)));
-			    out.println(text);
-			    out.close();
-			} catch (IOException e) {
-	
-			}
-		
+
+
+
+
+
+
+
+
 	}
 	
 	
