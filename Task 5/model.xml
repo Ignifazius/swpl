@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	<featureModel chosenLayoutAlgorithm="1">
+		<struct>
+			<and abstract="true" mandatory="true" name="Chat_SP_Task5">
+				<alt mandatory="true" name="Base">
+					<and mandatory="true" name="GUI">
+						<feature name="Font"/>
+						<feature name="Color"/>
+					</and>
+					<feature mandatory="true" name="Konsole"/>
+				</alt>
+				<feature name="Log"/>
+				<feature name="Sound"/>
+				<feature name="Verschluesselung"/>
+				<feature name="Password"/>
+			</and>
+		</struct>
+		<constraints/>
+		<comments/>
+		<featureOrder userDefined="false"/>
+	</featureModel>
