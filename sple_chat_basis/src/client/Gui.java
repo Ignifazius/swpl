@@ -1,41 +1,27 @@
-package client; 
+package client;
 
-import java.awt.event.ActionEvent; 
-import java.awt.event.ActionListener; 
-import javax.swing.JFrame; 
-import javax.swing.JTextField; 
-import javax.swing.JTextArea; 
-import javax.swing.GroupLayout; 
-import javax.swing.GroupLayout.Alignment.*; 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment.*;
 
 /**
  * simple swing gui for the chat client
  */
-public  class  Gui  extends JFrame  implements ChatLineListener {
-	
+public class Gui extends JFrame implements ChatLineListener {
 
 	private static final long serialVersionUID = 1L;
 
-	
-
 	protected JTextArea outputTextbox;
-
-	
 	protected JTextField inputField;
 
-	
-
 	private static int rowstextarea = 20;
-
-	
 	private static int colstextarea = 60;
 
-	
-
-	//private Client chatClient;
 	private Client chatClient;
-
-	
 
 	/**
 	 * creates layout
@@ -80,8 +66,6 @@ public  class  Gui  extends JFrame  implements ChatLineListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.chatClient = chatClient;
 	}
-
-	
 	
 	private ActionListener getInput() {
 		return new ActionListener() {
@@ -92,8 +76,6 @@ public  class  Gui  extends JFrame  implements ChatLineListener {
 		};
 	}
 
-	
-
 	/**
 	 * this method gets called every time a new message is received (observer
 	 * pattern)
@@ -101,6 +83,5 @@ public  class  Gui  extends JFrame  implements ChatLineListener {
 	public void newChatLine(String line) {
 		outputTextbox.append(line);
 	}
-
 
 }

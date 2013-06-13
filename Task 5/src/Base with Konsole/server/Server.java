@@ -8,13 +8,12 @@ import java.util.Iterator;
 import java.io.BufferedWriter; 
 import java.io.FileWriter; 
 import java.io.IOException; 
-import java.io.PrintWriter; /**
- * TODO description
+import java.io.PrintWriter; 
+
+/**
+ * server's main class. accepts incoming connections and allows broadcasting
  */
-public /**
- * TODO description
- */
-class  Server {
+public  class  Server {
 	
 
 	public static void main(String args[]) throws IOException {
@@ -73,19 +72,13 @@ class  Server {
 	 * @param text
 	 *            content of the message
 	 */
-	 private void  broadcast__wrappee__Base  (String text) {
+	public void broadcast(String text) {
 		synchronized (connections) {
 			for (Iterator iterator = connections.iterator(); iterator.hasNext();) {
 				Connection connection = (Connection) iterator.next();
 				connection.send(text);
 			}
 		}
-	}
-
-	
-	public void broadcast(String text) {
-		broadcast__wrappee__Base(text);
-		logger(text);
 	}
 
 	
@@ -98,18 +91,6 @@ class  Server {
 	 */
 	public void removeConnection(Connection connection) {
 		connections.remove(connection);
-	}
-
-	
-	
-	public void logger(String text){
-		try {
-			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_server.txt", true)));
-			out.println(text);
-			out.close();
-		} catch (IOException e) {
-
-		}
 	}
 
 

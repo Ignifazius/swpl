@@ -1,6 +1,3 @@
-/**
- * TODO description
- */
 package client; 
 
 import java.io.BufferedWriter; 
@@ -14,14 +11,12 @@ import java.net.Socket;
 import java.util.ArrayList;  
 import java.util.Iterator;  
 
-import common.TextMessage; /**
- * TODO description
+import common.TextMessage;  
+
+/**
+ * simple chat client
  */
-import java.awt.Toolkit; 
-
-public 
-
-class  Client  implements Runnable {
+public  class  Client  implements Runnable {
 	
 	public static void main(String args[]) throws IOException {
 		if (args.length != 2)
@@ -97,35 +92,16 @@ class  Client  implements Runnable {
 	 * @param msg
 	 *            the message (Object) received from the sockets
 	 */
-	 private void  handleIncomingMessage__wrappee__Log  (Object msg) {
+	protected void handleIncomingMessage(Object msg) {
 		if (msg instanceof TextMessage) {
 			fireAddLine(((TextMessage) msg).getContent() + "\n");
 		}
 	}
 
 	
-	protected void handleIncomingMessage(Object msg) {
-		handleIncomingMessage__wrappee__Log(msg);
-		Toolkit.getDefaultToolkit().beep();
-	}
 
-	
-
-	 private void  send__wrappee__Log  (String line) {
-		send(new TextMessage(line));
-	}
-
-	
-	
-	 private void  send__wrappee__Sound  (String line) {
-		send__wrappee__Log(line);
-		Toolkit.getDefaultToolkit().beep();
-	}
-
-	
 	public void send(String line) {
-		String enc = encrypt(line);
-		send__wrappee__Sound(enc);
+		send(new TextMessage(line));
 	}
 
 	
@@ -166,52 +142,21 @@ class  Client  implements Runnable {
 	}
 
 	
-	 private void  fireAddLine__wrappee__Sound  (String line) {
+
+	/**
+	 * fire Listner method for the observer pattern
+	 */
+	public void fireAddLine(String line) {
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
 			ChatLineListener listener = (ChatLineListener) iterator.next();
 			listener.newChatLine(line);
-			logger(line);
 		}
-	}
-
-	
-	
-	public void fireAddLine(String line) {
-		fireAddLine__wrappee__Sound(encrypt(line));
 	}
 
 	
 
 	public void stop() {
 		thread = null;
-	}
-
-	
-
-	public void logger(String text){
-		try {
-			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log_client.txt", true)));
-			out.println(text);
-			out.close();
-		} catch (IOException e) {
-
-		}
-	}
-
-	
-	
-	
-	private String encrypt(String in){
-		String out = "";
-        for (int i = 0; i < in.length(); i++) {
-            char c = in.charAt(i);
-            if       (c >= 'a' && c <= 'm') c += 13;
-            else if  (c >= 'A' && c <= 'M') c += 13;
-            else if  (c >= 'n' && c <= 'z') c -= 13;
-            else if  (c >= 'N' && c <= 'Z') c -= 13;
-            out += c;
-        }
-        return out;
 	}
 
 

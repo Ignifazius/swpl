@@ -13,6 +13,7 @@
 				<feature name="Sound"/>
 				<feature name="Verschluesselung"/>
 				<feature name="Password"/>
+				<feature name="Spamfilter"/>
 			</and>
 		</struct>
 		<constraints/>

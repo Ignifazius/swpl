@@ -1,6 +1,8 @@
 /**
  * TODO description
  */
+import java.util.Scanner;
+
 class Gui {
 	private Client chatClient;
 	
@@ -14,11 +16,11 @@ class Gui {
 			System.out.print(">");
 			String line = scan.nextLine();
 			
-			chatClient.send(line);			
+			chatClient.send(line);
 		}
 	}
 	
 	public void newChatLine(String line) {
-		System.out.println(line);
+		System.out.print(line);
 	}
 }

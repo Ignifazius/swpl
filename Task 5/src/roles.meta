@@ -1,28 +1,11 @@
 {
 	"features" : [
 		"Base",
-		"Log",
-		"Sound",
-		"Verschluesselung"
+		"Konsole"
 	],
 	"roles": {
-		"fireAddLine": {
-			"Log": "fireAddLine__wrappee__Sound",
-			"Verschluesselung": "fireAddLine",
-			"Sound": "fireAddLine__wrappee__Sound"
-		},
-		"broadcast": {
-			"Base": "broadcast__wrappee__Base",
-			"Log": "broadcast"
-		},
-		"send": {
-			"Log": "send__wrappee__Log",
-			"Verschluesselung": "send",
-			"Sound": "send__wrappee__Sound"
-		},
-		"handleIncomingMessage": {
-			"Log": "handleIncomingMessage__wrappee__Log",
-			"Sound": "handleIncomingMessage"
+		"newChatLine": {
+			"Konsole": "newChatLine"
 		}
 	}
 
